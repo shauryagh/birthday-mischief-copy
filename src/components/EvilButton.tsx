@@ -39,38 +39,44 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
     return { x: randomX, y: randomY };
   }, []);
 
-  const handleClick = () => {
+  const runAway = useCallback(() => {
+    if (isCaught || attempts >= 5) return;
+    
+    const newAttempts = attempts + 1;
+    setAttempts(newAttempts);
+    setCurrentMessage(sassyMessages[attempts]);
+    
+    if (newAttempts < 5) {
+      setPosition(getRandomPosition());
+    } else {
+      // After 5th attempt, button is caught
+      setIsCaught(true);
+      setCurrentMessage(null);
+    }
+    
+    // Clear message after a short delay
+    setTimeout(() => {
+      if (newAttempts < 5) {
+        setCurrentMessage(null);
+      }
+    }, 800);
+  }, [attempts, isCaught, getRandomPosition]);
+
+  const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+    
     if (isCaught) {
       onCaught();
       return;
     }
-
-    if (attempts < 5) {
-      const newAttempts = attempts + 1;
-      setAttempts(newAttempts);
-      setCurrentMessage(sassyMessages[attempts]);
-      
-      if (newAttempts < 5) {
-        setPosition(getRandomPosition());
-      } else {
-        // After 5th attempt, button is caught
-        setIsCaught(true);
-        setCurrentMessage(null);
-      }
-      
-      // Clear message after a short delay
-      setTimeout(() => {
-        if (newAttempts < 5) {
-          setCurrentMessage(null);
-        }
-      }, 800);
-    }
+    
+    runAway();
   };
 
   const handleMouseEnter = () => {
-    // Also run away on hover (before being caught)
+    // Run away on hover (before being caught)
     if (!isCaught && attempts < 4) {
-      handleClick();
+      runAway();
     }
   };
 
@@ -102,7 +108,7 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
         onTouchStart={(e) => {
           if (!isCaught && attempts < 4) {
             e.preventDefault();
-            handleClick();
+            runAway();
           }
         }}
         animate={{ 

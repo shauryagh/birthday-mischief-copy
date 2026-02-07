@@ -39,13 +39,29 @@ const Index = () => {
       {/* Video Player Overlay */}
       <AnimatePresence>
         {phase === 'videos' && (
-          <VideoPlayer onComplete={handleVideosComplete} />
+          <motion.div
+            key="video-player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <VideoPlayer onComplete={handleVideosComplete} />
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* Final Message Overlay */}
       <AnimatePresence>
-        {phase === 'final' && <FinalMessage />}
+        {phase === 'final' && (
+          <motion.div
+            key="final-message"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <FinalMessage />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Premature Click Modal */}
