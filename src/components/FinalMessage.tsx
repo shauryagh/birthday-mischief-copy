@@ -31,7 +31,7 @@ const FinalMessage = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="text-4xl sm:text-5xl md:text-6xl font-semibold text-background mb-4"
         >
-          Happy 21st, idiot.
+          Happy 21st, sunshine.
         </motion.h1>
         
         {/* Subtext */}
@@ -41,7 +41,7 @@ const FinalMessage = () => {
           transition={{ delay: 0.9, duration: 0.8 }}
           className="text-background/60 text-lg sm:text-xl"
         >
-          Now you can cry.
+          I love you.
         </motion.p>
 
         {/* Hearts decoration */}
