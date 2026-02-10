@@ -10,8 +10,15 @@ const sassyMessages = [
   "Nope.",
   "Almost.",
   "Hehehe.",
-  "Last chance.",
+  "Still trying?",
+  "Reflex kaha hai?",
+  "Arey focus.",
+  "Embarrassing.",
+  "Bas bas.",
+  "Last chance."
 ];
+
+const MAX_ATTEMPTS = 10;
 
 const EvilButton = ({ onCaught }: EvilButtonProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -26,64 +33,64 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
 
     const container = containerRef.current.getBoundingClientRect();
     const button = buttonRef.current.getBoundingClientRect();
-    
-    // Calculate safe bounds (with padding)
+
     const padding = 20;
     const maxX = container.width - button.width - padding * 2;
     const maxY = container.height - button.height - padding * 2;
-    
-    // Generate random position
+
     const randomX = Math.random() * maxX - maxX / 2;
     const randomY = Math.random() * maxY - maxY / 2;
-    
+
     return { x: randomX, y: randomY };
   }, []);
 
   const runAway = useCallback(() => {
-    if (isCaught || attempts >= 5) return;
-    
+    if (isCaught || attempts >= MAX_ATTEMPTS) return;
+
     const newAttempts = attempts + 1;
     setAttempts(newAttempts);
-    setCurrentMessage(sassyMessages[attempts]);
-    
-    if (newAttempts < 5) {
+
+    // Safe message indexing
+    setCurrentMessage(
+      sassyMessages[Math.min(newAttempts - 1, sassyMessages.length - 1)]
+    );
+
+    if (newAttempts < MAX_ATTEMPTS) {
       setPosition(getRandomPosition());
     } else {
-      // After 5th attempt, button is caught
       setIsCaught(true);
       setCurrentMessage(null);
     }
-    
-    // Clear message after a short delay
+
     setTimeout(() => {
-      if (newAttempts < 5) {
+      if (newAttempts < MAX_ATTEMPTS) {
         setCurrentMessage(null);
       }
     }, 800);
+
   }, [attempts, isCaught, getRandomPosition]);
 
   const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
-    
+
     if (isCaught) {
       onCaught();
       return;
     }
-    
+
     runAway();
   };
 
   const handleMouseEnter = () => {
-    // Run away on hover (before being caught)
-    if (!isCaught && attempts < 4) {
+    if (!isCaught && attempts < MAX_ATTEMPTS - 1) {
       runAway();
     }
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
-      className="relative w-full h-[200px] sm:h-[250px] flex items-center justify-center"
+      className="relative w-full h-[220px] sm:h-[280px] flex items-center justify-center"
     >
       {/* Sassy message */}
       <AnimatePresence mode="wait">
@@ -106,28 +113,28 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onTouchStart={(e) => {
-          if (!isCaught && attempts < 4) {
+          if (!isCaught && attempts < MAX_ATTEMPTS - 1) {
             e.preventDefault();
             runAway();
           }
         }}
-        animate={{ 
-          x: position.x, 
+        animate={{
+          x: position.x,
           y: position.y,
           scale: isCaught ? 1.05 : 1,
         }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 300, 
-          damping: 20 
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
         }}
         whileHover={isCaught ? { scale: 1.08 } : {}}
         whileTap={isCaught ? { scale: 0.95 } : {}}
         className={`
           px-8 py-4 rounded-lg font-medium text-base sm:text-lg
           transition-colors duration-200
-          ${isCaught 
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer' 
+          ${isCaught
+            ? 'bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer'
             : 'bg-muted text-muted-foreground cursor-pointer'
           }
         `}
@@ -135,14 +142,14 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
         {isCaught ? "Fine, you got me." : "Click if you can."}
       </motion.button>
 
-      {/* Attempt counter */}
+      {/* Attempt counter (optional if you want visible chaos) */}
       {!isCaught && attempts > 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="absolute bottom-4 text-xs text-muted-foreground"
         >
-        
+      
         </motion.div>
       )}
     </div>
