@@ -142,7 +142,7 @@ const EvilButton = ({ onCaught }: EvilButtonProps) => {
           animate={{ opacity: 1 }}
           className="absolute bottom-4 text-xs text-muted-foreground"
         >
-          Attempts: {attempts}/5
+        
         </motion.div>
       )}
     </div>
