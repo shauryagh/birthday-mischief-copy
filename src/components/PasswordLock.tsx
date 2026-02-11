@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const CORRECT_PASSWORD = '21queen';
+const CORRECT_PASSWORD = 'HAATHI';
+const MAX_FAKE_ATTEMPTS = 3;
 
 interface PasswordLockProps {
   onUnlock: () => void;
@@ -11,17 +12,32 @@ const PasswordLock = ({ onUnlock }: PasswordLockProps) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [shake, setShake] = useState(false);
+  const [fakeAttemptsLeft, setFakeAttemptsLeft] = useState(MAX_FAKE_ATTEMPTS);
+
+  const getFakeMessage = () => {
+    if (fakeAttemptsLeft === 3) return "3 attempts remaining.";
+    if (fakeAttemptsLeft === 2) return "2 attempts remaining. Soch le dhang se.";
+    if (fakeAttemptsLeft === 1) return "Last attempt. Dimaag laga.";
+    return "No attempts left. (Jaa 1 aur try lele 😌)";
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password === CORRECT_PASSWORD) {
       onUnlock();
-    } else {
-      setError(true);
-      setShake(true);
-      setPassword('');
-      setTimeout(() => setShake(false), 500);
+      return;
     }
+
+    // Wrong password logic
+    setError(true);
+    setShake(true);
+    setPassword('');
+
+    setTimeout(() => setShake(false), 500);
+
+    // Decrease fake attempts but don't go negative
+    setFakeAttemptsLeft((prev) => (prev > 0 ? prev - 1 : 0));
   };
 
   return (
@@ -38,7 +54,9 @@ const PasswordLock = ({ onUnlock }: PasswordLockProps) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h2 className="text-3xl font-light text-foreground">Enter Password</h2>
+        <h2 className="text-3xl font-light text-foreground">
+          Enter Password
+        </h2>
 
         <motion.input
           type="password"
@@ -62,6 +80,16 @@ const PasswordLock = ({ onUnlock }: PasswordLockProps) => {
             Wrong password 👀
           </motion.p>
         )}
+
+        {/* Fake Attempts Line */}
+        <motion.p
+          key={fakeAttemptsLeft}
+          className="text-xs text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          {getFakeMessage()}
+        </motion.p>
 
         <button
           type="submit"
