@@ -5,12 +5,14 @@ import EvilButton from '@/components/EvilButton';
 import PrematureModal from '@/components/PrematureModal';
 import VideoPlayer from '@/components/VideoPlayer';
 import FinalMessage from '@/components/FinalMessage';
+import PasswordLock from '@/components/PasswordLock';
 
 // ✅ Correct Date
 const TARGET_DATE = new Date('2026-02-12T00:00:00');
 
 type Phase =
   | 'countdown'
+  | 'locked'
   | 'unlocked'
   | 'almost'
   | 'loading'
@@ -19,12 +21,16 @@ type Phase =
 
 const Index = () => {
   const [phase, setPhase] = useState<Phase>(() =>
-    new Date() >= TARGET_DATE ? 'unlocked' : 'countdown'
+    new Date() >= TARGET_DATE ? 'locked' : 'countdown'
   );
 
   const [showModal, setShowModal] = useState(false);
 
   const handleCountdownComplete = useCallback(() => {
+    setPhase('locked');
+  }, []);
+
+  const handlePasswordUnlock = useCallback(() => {
     setPhase('unlocked');
   }, []);
 
@@ -127,6 +133,12 @@ const Index = () => {
           </button>
         </>
       )}
+
+      <AnimatePresence>
+        {phase === 'locked' && (
+          <PasswordLock onUnlock={handlePasswordUnlock} />
+        )}
+      </AnimatePresence>
 
       {phase === 'unlocked' && (
         <>
