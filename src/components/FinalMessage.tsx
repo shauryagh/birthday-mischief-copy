@@ -31,7 +31,7 @@ const FinalMessage = () => {
           transition={{ delay: 0.6, duration: 0.8 }}
           className="text-4xl sm:text-5xl md:text-6xl font-semibold text-background mb-4"
         >
-          Happy 21st, sunshine.
+          Happy 20th, sunshine.
         </motion.h1>
         
         {/* Subtext */}
