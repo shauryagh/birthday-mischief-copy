@@ -7,7 +7,7 @@ import VideoPlayer from '@/components/VideoPlayer';
 import FinalMessage from '@/components/FinalMessage';
 import PasswordLock from '@/components/PasswordLock';
 
-// ✅ Correct Date
+// Correct Date
 const TARGET_DATE = new Date('2026-02-12T00:00:00');
 
 type Phase =
