@@ -8,7 +8,7 @@ import FinalMessage from '@/components/FinalMessage';
 import PasswordLock from '@/components/PasswordLock';
 
 // Correct Date
-const TARGET_DATE = new Date('2026-02-12T00:00:00');
+const TARGET_DATE = new Date('2026-03-05T00:00:00');
 
 type Phase =
   | 'countdown'
@@ -129,7 +129,7 @@ const Index = () => {
             onClick={handlePrematureClick}
             className="mt-10 px-8 py-4 bg-muted text-muted-foreground rounded-lg"
           >
-            Jab 21 ki hojae tab click kario.
+            Jab 20 ki hojae tab click kario.
           </button>
         </>
       )}
@@ -142,7 +142,7 @@ const Index = () => {
 
       {phase === 'unlocked' && (
         <>
-          <h1 className="text-8xl font-light mb-4">12.02</h1>
+          <h1 className="text-8xl font-light mb-4">05.03</h1>
           <p className="text-muted-foreground mb-12">
             Okay fine. Now try clicking.
           </p>
