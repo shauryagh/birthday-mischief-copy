@@ -53,7 +53,7 @@ const PrematureModal = ({ isOpen, onClose }: PrematureModalProps) => {
                   transition={{ delay: 0.2 }}
                   className="text-2xl font-semibold text-foreground mb-2"
                 >
-                  Tham jaa hathi
+                  Tham jaa Chipmunk
                 </motion.h3>
 
                 {/* Subtext */}
