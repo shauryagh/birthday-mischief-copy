@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const CORRECT_PASSWORD = 'HAATHI';
+const CORRECT_PASSWORD = 'chicken';
 const MAX_FAKE_ATTEMPTS = 3;
 
 interface PasswordLockProps {
